@@ -1,7 +1,7 @@
 # **2D TRON arcade game in C++ with Qt**
 
 This was a GUI project to familiarize myself with the Qt framework and C++ in general.
-The game was coded with and using a different version might cause some issues.
+The game was coded with Qt MinGW-w64 4.2 and using a different version might cause some issues.
 
 This game of Tron consists of two players who move leaving behind a trail.
 Players cannot pass through other walls or any players' trails, including their own.
