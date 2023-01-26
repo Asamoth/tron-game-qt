@@ -2,12 +2,12 @@
 #include "qpen.h"
 
 /*
- * La classe TronTrail est une sous-classe de QGraphicsLineItem qui est utilisée pour représenter les trainées
- * laissées par les objets TronPlayer dans le jeu. Il est nécessaire de différencier les traces de différents
- * joueurs car elles peuvent entrer en collision et il est alors nécessaire de pouvoir différencier les trainées
- * de chaque joueur avec leur numéro de joueur. La classe TronTrail ajoute une variable de membre playerNumber qui
- * stocke le numéro de joueur de l'objet TronPlayer qui a créé la trainée, ça nous permet d'identifier les trainées
- * de quel joueur nous avons à faire et de vérifier les collisions avec les traces d'autres joueurs.
+  * The TronTrail class is a subclass of QGraphicsLineItem which is used to represent trails
+  * left by TronPlayer objects in the game. It is necessary to differentiate the traces of different
+  * players because they can collide and it is then necessary to be able to differentiate the trails
+  * of each player with their player number. The TronTrail class adds a member variable playerNumber which
+  * stores the player number of the TronPlayer object that created the trail, it allows us to identify trails
+  * which player we have to do and check collisions with other player's tracks.
 */
 TronTrail::TronTrail(int playerNumber, qreal initialX, qreal initialY, qreal finalX, qreal finalY, QGraphicsItem *parent)
     : QGraphicsLineItem(initialX, initialY, finalX, finalY, parent),
