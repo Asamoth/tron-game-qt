@@ -11,7 +11,7 @@ Game::Game(int pos, int difficulty)
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setFixedSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
-    // Définit la taille de la scène
+    // Set the size of the scene
     scene.setSceneRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
     scene.addItem(&m_player1);
@@ -27,13 +27,13 @@ Game::Game(int pos, int difficulty)
     m_music->play();
 
     if (difficulty == 0){
-        // Difficulté facile
+        // Easy difficulty
         countdown = 30;
     } else if (difficulty == 1){
-        // Difficulté moyenne
+        // Medium difficulty
         countdown = 20;
     } else {
-        // Difficulté difficile
+        // Hard difficulty
         countdown = 10;
     }
     m_timercountdown = new QTimer(this);
@@ -43,14 +43,14 @@ Game::Game(int pos, int difficulty)
     m_countdownLabel = new QLabel(this);
     m_countdownLabel->setText(QString::number(countdown));
 
-    // Définit la position du label en haut à droite de fenêtre
+    // Define the position of the label at the top right of the window
     m_countdownLabel->setGeometry(width() - m_countdownLabel->width(), 0, m_countdownLabel->width(), m_countdownLabel->height());
     m_countdownLabel->setFixedSize(100, 50);
 }
 
 void Game::keyPressEvent(QKeyEvent *event)
 {
-    // Transmets l'événement au joueur approprié en fonction de la touche qui a été pressée
+    // Pass the event to the appropriate player based on the key that was pressed
     if (event->key() == Qt::Key_W || event->key() == Qt::Key_A || event->key() == Qt::Key_S || event->key() == Qt::Key_D) {
         m_player1.keyPressEvent(event);
     } else if (event->key() == Qt::Key_Up || event->key() == Qt::Key_Left || event->key() == Qt::Key_Down || event->key() == Qt::Key_Right) {
@@ -60,25 +60,25 @@ void Game::keyPressEvent(QKeyEvent *event)
 extern Menu *menu;
 void Game::updateCountdown()
 {
-    countdown--; // Diminue le compte à rebours de 1 seconde
+    countdown--; // Decrease the countdown by 1 second
     if (countdown <= 0) {
-        // Le compte à rebours a atteint 0, arrête le minuteur
+        // Countdown has reached 0, stop the timer
         m_timercountdown->stop();
 
-        qDebug() << "Le compte à rebours a terminé!";
+        qDebug() << "The countdown has ended!";
         this->close();
         menu->close();
         if (m_player1.scorePlayer > m_player2.scorePlayer){
-            qDebug() << "Player1 a le meilleur score!";
+            qDebug() << "Player1 has the highest score!";
         } else if (m_player1.scorePlayer < m_player2.scorePlayer){
-            qDebug() << "Player2 a le meilleur score!";
+            qDebug() << "Player2 has the highest score!";
         } else {
-            qDebug() << "Les deux joueurs ont le même score!";
+            qDebug() << "Both players have the same score!";
         }
         qDebug() << "Player1 :" << m_player1.scorePlayer;
         qDebug() << "Player2 :" << m_player2.scorePlayer;
     } else {
-        // Mets à jour l'affichage du compte à rebours sur la fenêtre
+        // Update the countdown display on the window
         m_countdownLabel->setText(QString::number(countdown));
     }
 }
