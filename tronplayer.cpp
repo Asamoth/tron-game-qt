@@ -20,17 +20,17 @@ TronPlayer::TronPlayer(int playerNumber, int startX, int startY, int difficulty)
     setBrush(QBrush(Qt::red));
 
     if (difficulty == 0){
-        // Difficulté facile
+        // Easy difficulty
         m_speed = 1;
     } else if (difficulty == 1){
-        // Difficulté moyenne
+        // Medium difficulty
         m_speed = 3;
     } else {
-        // Difficulté difficle
+        // Hard difficulty
         m_speed = 5;
     }
 
-    // Règle les orientations initiales des 2 joueurs
+    // Set the initial orientations of the 2 players
     if (playerNumber == 1) {
         m_dx = m_speed;
         m_dy = 0;
@@ -48,13 +48,13 @@ TronPlayer::~TronPlayer()
 }
 
 /*
- * Cette fonction gère les événements de pression de touche pour la classe TronPlayer. Elle définit la direction de
- * déplacement du joueur en fonction des touches pressées. Si la barre d'espace est pressée, elle met en pause ou
- * réactive l'état de pause du jeu.
- *
- * Le premier joueur se déplace en appuyant sur les touches WASD (W -> haut, A -> gauche, S -> bas, D -> droite).
- * Le second joueur se déplace en appuyant sur les touches des flèches.
- *
+  * This function handles key press events for the TronPlayer class. It defines the direction of
+  * movement of the player according to the keys pressed. If the spacebar is pressed, it pauses or
+  * re-enables the game's paused state.
+  *
+  * The first player moves by pressing the WASD keys (W -> up, A -> left, S -> down, D -> right).
+  * The second player moves by pressing the arrow keys.
+  *
 */
 void TronPlayer::keyPressEvent(QKeyEvent *event)
 {
@@ -142,131 +142,131 @@ void TronPlayer::keyPressEvent(QKeyEvent *event)
         }
 }
 /*
- * La fonction advanceTronPlayer() mets à jour la position du joueur, gère la création des trainées derrière le joueur
- * après s'être déplacé. Ensuite, on vérifie si le joueur entre à collision avec des murs ou avec des trainées.
- * Finalement, on va afficher le score du joueur en fonction de la longueur de la trainée du joueur.
- * Le but de compter la longueur de la trainée du joueur ne sert ici à rien :
- * Initialement, le but était de pouvoir modifier à souhait la vitesse de son joueur afin plus facilement éviter
- * les collisions en limitant sa propre vitesse. Cependant, se faciliter la tache a nécessairement un désavantage,
- * sinon le jeu n'est pas balancé. Le fait de rabaisser sa propre vitesse engendre que lorsque l'on va moins vite,
- * le joueur aura son score qui va augmenter plus lentement, vu que le score est proportionel à la longueur de la trainée,
- * et donc naturellement à la vitesse. Cependant, je n'ai pas eu le temps d'intégrer tout ces comportements. Mais le compteur
- * de score est resté intégré.J'ai intégré un compte à rebours en haut à droite de la fenêtre - une fois que ce compte à rebours
- * atteint 0, le joueur ayant le plus grand score (et donc le joueur ayant pris le plus de risque, car ayant été le plus rapide)
- * gagne. Le but de comportement est de dynamiser le jeu si aucun des joueurs ne passe à l'offensive et pour récompenser les
- * prises de risque.
- *
+  * The advanceTronPlayer() function updates the position of the player, manages the creation of trails behind the player
+  * after moving. Then we check if the player is colliding with walls or trails.
+  * Finally, we will display the score of the player according to the length of the trail of the player.
+  * The purpose of counting the length of the player's trail is useless here:
+  * Initially, the goal was to be able to modify the player's speed as desired in order to more easily avoid
+  * collisions by limiting its own speed. However, making the task easier necessarily has a disadvantage,
+  * otherwise the game is not balanced. Lowering your own speed means that when you go slower,
+  * the player will have his score which will increase more slowly, since the score is proportional to the length of the trail.
+  * However, I did not have time to integrate all these behaviors. But the counter
+  * of score remained integrated. I integrated a countdown timer at the top right of the window - once this countdown
+  * reaches 0, the player with the highest score (and therefore the player who took the most risk, because he was the fastest)
+  * won. The purpose of behavior is to energize the game if none of the players goes on the offensive and to reward the
+  * risk taking.
+  *
 */
 void TronPlayer::advanceTronPlayer()
 {
-    // Garde en mémoire la position actuelle avant de mettre à jour sa position
+    // Remember the current position before updating its position
     m_lastPosX = x() + m_startX;
     m_lastPosY = y() + m_startY;
 
-    // Mets à jour la position du joueur
+    // Update player position
     setPos(x() + m_dx, y() + m_dy);
 
     /*
-     * Gère la création des objets trainées.
-     * Il est nécessaire de prendre en compte le comportement lorsque le joueur tourne sinon des trainées vont dépasser.
-     * On utilise la variable booléenne m_turning qui vérifie si c'est la première instance pour laquelle on tourne.
-     * Une fois que l'objet trainée est crée, on va stocker en mémoire la variable m_turningCoords.
-     * On va attendre qu'un certain côté (en fonction de vers où on tourne) atteigne une condition vis-à-vis
-     * de m_turningCoords définit de manière empirique.
+      * Handles the creation of trail objects.
+      * It is necessary to take into account the behavior when the player turns otherwise trails will protrude.
+      * We use the boolean variable m_turning which checks if this is the first instance for which we are turning.
+      * Once the trailing object is created, we will store the m_turningCoords variable in memory.
+      * We will wait for a certain side (depending on where we are turning) to reach a certain condition
+      * for m_turningCoords, defined empirically.
     */
     if (m_lastOrientation == 0){
-        // Le joueur se déplace vers la droite
+        // The player moves to the right
         if (m_turning == false){
             TronTrail *m_trail = new TronTrail(m_playerNumber, m_lastPosX-6, m_lastPosY+5, m_lastPosX+m_dx-6, m_lastPosY+5);
             game->scene.addItem(m_trail);
         } else {
             if (m_turningCounter == true){
-                // Garde en mémoire la variable x du côté droit du joueur
+                // Keep in memory the variable x on the right side of the player
                 m_turningCoords = m_lastPosX + 10;
                 m_turningCounter = false;
             }
             if (m_lastPosX+6 > m_turningCoords){
-                // On continue d'ajouter des trainées
+                // We keep adding trails
                 m_turning = false;
             }
         }
     } else if (m_lastOrientation == 1){
-        // Le joueur se déplace vers la gauche
+        // The player moves to the left
         if (m_turning == false){
             TronTrail *m_trail = new TronTrail(m_playerNumber, m_lastPosX+16, m_lastPosY+5, m_lastPosX+m_dx+16, m_lastPosY+5);
             game->scene.addItem(m_trail);
         } else {
             if (m_turningCounter == true){
-                // Garde en mémoire la variable x du côté gauche du joueur
+                // Keep in memory the variable x on the left side of the player
                 m_turningCoords = m_lastPosX;
                 m_turningCounter = false;
             }
             if (m_lastPosX < m_turningCoords){
-                // On continue d'ajouter des trainées
+                // We keep adding trails
                 m_turning = false;
             }
         }
     } else if (m_lastOrientation == 2){
-        // Le joueur se déplace vers le haut
+        // The player moves up
         if (m_turning == false){
             TronTrail *m_trail = new TronTrail(m_playerNumber, m_lastPosX+5, m_lastPosY+16, m_lastPosX+5, m_lastPosY+m_dy+16);
             game->scene.addItem(m_trail);
         } else {
             if (m_turningCounter == true){
-                // Garde en mémoire la variable y du haut du joueur
+                // Remember the player's top y variable
                 m_turningCoords = m_lastPosY;
                 m_turningCounter = false;
             }
             if (m_lastPosY < m_turningCoords){
-                // On continue d'ajouter des trainées
+                // We keep adding trails
                 m_turning = false;
             }
         }
     } else {
-        // Le joueur se déplace vers le bas
+        // The player moves down
         if (m_turning == false){
             TronTrail *m_trail = new TronTrail(m_playerNumber, m_lastPosX+5, m_lastPosY-6, m_lastPosX+5, m_lastPosY+m_dy-6);
             game->scene.addItem(m_trail);
         } else {
             if (m_turningCounter == true){
-                // Garde en mémoire la variable y du bas du joueur
+                // Keep in memory the variable y of the bottom of the player
                 m_turningCoords = m_lastPosY+10;
                 m_turningCounter = false;
             }
             if (m_lastPosY+6 > m_turningCoords){
-                // On continue d'ajouter des trainées
+                // We keep adding trails
                 m_turning = false;
             }
         }
     }
 
-    // Vérifie la collision avec les trainées des autres joueurs
+    // Check for collision with other players' trails
     QList<QGraphicsItem *> collidingItems = this->collidingItems();
     for (int i = 0; i < collidingItems.size(); ++i) {
         QGraphicsItem *item = dynamic_cast<QGraphicsItem*>(collidingItems[i]);
         if (typeid(*item) == typeid(TronTrail)) {
             // End game
-            qDebug() << "Joueur" << m_playerNumber << "entre en collision avec une trainée!";
+            qDebug() << "Player" << m_playerNumber << "collides with a trail!";
             QApplication::quit();
         }
     }
-    // Vérifie la collision avec les murs
+    // Check the collision with the walls
     if (x() + m_startX < 0 || x() + m_startX + rect().width() > SCREEN_WIDTH || y() + m_startY < 0 || y() + m_startY + rect().height() > SCREEN_HEIGHT) {
-        /* Il faut rajouter m_startX/Y aux coordonnées car x()/y() s'initialisent à la position initiale du joueur
-         * Or cette position initiale du joueur par rapport au centre du repère est situé à (m_startX,m_startY) et non (0,0)
+        /* We must add m_startX/Y to the coordinates because x()/y() are initialized at the initial position of the player
+         * But this initial position of the player with respect to the center of the reference is located at (m_startX,m_startY) and not (0,0)
         */
-        // Fin du jeu
-        qDebug() << "Joueur" << m_playerNumber << "entre en collision avec un mur!";
+        // End of Game
+        qDebug() << "Player" << m_playerNumber << "collides with a trail!";
         QApplication::quit();
     }
-    // Mets à jour le score
+    // Update the score
     if (m_scoreText) {
         game->scene.removeItem(m_scoreText);
         delete m_scoreText;
     }
 
-    // Obtiens les trainées du joueur et compte son score en fonction de la longueur de celui-ci
-    QList<TronTrail*> trails; // liste de tous les objets trainées dans la fenêtre
+    // Get the player's trails and count their score based on the length of the trail
+    QList<TronTrail*> trails; // list of all trail objects in the window
     QList<QGraphicsItem*> items = game->scene.items(Qt::AscendingOrder);
     for (QGraphicsItem* item : items) {
         TronTrail* trail = dynamic_cast<TronTrail*>(item);
@@ -277,7 +277,7 @@ void TronPlayer::advanceTronPlayer()
 
     int score = 0;
     for (TronTrail* trail : trails) {
-        // Vérifie si le numéro du joueur du bout de trainée corresponds au numéro de joueur du joueur actuel
+        // Check if the trail end's player number matches the current player's player number
         if (trail->playerNumber() == m_playerNumber) {
             score += trail->line().length();
         }
