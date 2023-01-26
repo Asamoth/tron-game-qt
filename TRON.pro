@@ -1,5 +1,5 @@
 QT       += core gui \
-            multimedia # Nécessaire afin d'ajouter des musiques
+            multimedia # Necessary to add music
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
