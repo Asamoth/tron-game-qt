@@ -7,7 +7,7 @@ Menu::Menu(QWidget *parent)
     : QMainWindow(parent)
 {
     menuGame();
-    m_difficulty = 1; // Initialement, la difficulté est réglée sur Moyenne
+    m_difficulty = 1; // Initially the difficulty is set to Medium
 }
 Game *game;
 void Menu::startGame()
@@ -18,38 +18,37 @@ void Menu::startGame()
 
 void Menu::showSettingsDialog()
 {
-    // Crée un nouveau layout
+    // Create a new layout
     QVBoxLayout *newLayout = new QVBoxLayout;
 
-    // Crée un label poour la selection de difficulté
-    QLabel *difficultyLabel = new QLabel("Choisir le niveau de difficulté", this);
+    // Create a label for the difficulty selection
+    QLabel *difficultyLabel = new QLabel("Choose the difficulty", this);
     difficultyLabel->setAlignment(Qt::AlignVCenter);
 
-    // Crée les boutons de difficulté
-    QPushButton *easyButton = new QPushButton("Facile", this);
-    QPushButton *mediumButton = new QPushButton("Moyen", this);
-    QPushButton *hardButton = new QPushButton("Difficile", this);
-    QPushButton *returnButton = new QPushButton("Retour", this);
+    // Create the difficulty buttons
+    QPushButton *easyButton = new QPushButton("Easy", this);
+    QPushButton *mediumButton = new QPushButton("Medium", this);
+    QPushButton *hardButton = new QPushButton("Hard", this);
+    QPushButton *returnButton = new QPushButton("Go back", this);
 
-    // Ajoute les widgets au layout
+    // Add the widgets to the layout
     newLayout->addWidget(difficultyLabel);
     newLayout->addWidget(easyButton);
     newLayout->addWidget(mediumButton);
     newLayout->addWidget(hardButton);
     newLayout->addWidget(returnButton);
 
-    // Règle le layout en tant que le widget central du layout
+    // Set the layout as the central layout widget
     QWidget *centralWidget = new QWidget(this);
     centralWidget->setLayout(newLayout);
     /*
-    Il est nécessaire de créer un widget central afin d'ajouter un layout.
-    Mais le fait d'ajouter un widget central ajoute un autre avantage :
-    Lorsque l'on change de configuration en cliquant sur un bouton, il
-    faut réinitialiser la fenêtre et tout effacer. Le fait de remplacer
-    un widget central permet de supprimer tout les éléments qui sont en
-    son sein.
+     It is necessary to create a central widget in order to add a layout.
+     But adding a central widget adds another advantage:
+     When you change configuration by clicking on a button, it
+     you have to reset the window and erase everything. The act of replacing
+     a central widget allows you to delete all the elements that are within it.
     */
-    // Règle le widget en tant que widget central de la fenêtre principale
+    // Set the widget as the central widget of the main window
     setCentralWidget(centralWidget);
 
     connect(easyButton, &QPushButton::clicked, this, &Menu::m_setEasyValue);
@@ -70,21 +69,21 @@ void Menu::menuGame()
     m_settingsButton->setFixedSize(100, 50);
     m_quitButton->setFixedSize(100, 50);
 
-    // Crée un layout vertical et ajouter les boutons
+    // Create a vertical layout and add the buttons
     QVBoxLayout *layout = new QVBoxLayout;
     layout->addWidget(m_playButton);
     layout->addWidget(m_settingsButton);
     layout->addWidget(m_quitButton);
 
-    // Crée un nouveau widget et y ajoute le layout
+    // Create a new widget and add the layout to it
     QWidget *centralWidget = new QWidget(this);
     centralWidget->setLayout(layout);
 
-    // Règle le widget en tant que widget central pour la fenêtre principale
+    // Set the widget as the central widget for the main window
     setCentralWidget(centralWidget);
 
     layout->setAlignment(Qt::AlignVCenter);
-    layout->setSpacing(10); // Ajoute 10 pixels d'espacement entre les boutons
+    layout->setSpacing(10); // Add 10 pixels of spacing between buttons
 
     connect(m_playButton, &QPushButton::clicked, this, &Menu::startGame);
     connect(m_settingsButton, &QPushButton::clicked, this, &Menu::showSettingsDialog);
